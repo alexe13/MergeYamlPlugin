@@ -1,0 +1,36 @@
+package ga.fundamental.mojo;
+
+import ga.fundamental.merge.YamlMerger;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+@Mojo(name = "merge-yaml")
+public class MergeYamlMojo extends AbstractMojo {
+
+	@Parameter(name = "finalYaml", required = true, property = "merge-yaml.finalYaml")
+	private String finalYaml;
+	@Parameter(name = "files", required = true, property = "merge-yaml.files")
+	private List<File> files;
+
+	@Override
+	public void execute() throws MojoExecutionException, MojoFailureException {
+		for (File file : files) {
+			if (!file.exists()) {
+				throw new MojoFailureException("File " + file + " does not exist");
+			}
+		}
+		//
+		try {
+			new YamlMerger(files, finalYaml).merge();
+		} catch (IOException e) {
+			throw new MojoExecutionException("Failed to merge yaml files", e);
+		}
+	}
+}
