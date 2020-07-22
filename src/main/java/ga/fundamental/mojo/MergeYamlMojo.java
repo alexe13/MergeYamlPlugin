@@ -8,10 +8,10 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Mojo(name = "merge-yaml")
+@Mojo(name = "mergeYaml")
 public class MergeYamlMojo extends AbstractMojo {
 
 	@Parameter(name = "finalYaml", required = true, property = "merge-yaml.finalYaml")
@@ -28,8 +28,9 @@ public class MergeYamlMojo extends AbstractMojo {
 		}
 		//
 		try {
+			System.out.println("Merging files " + files.stream().map(File::getName).collect(Collectors.joining(",")) + " into " + finalYaml);
 			new YamlMerger(files, finalYaml).merge();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new MojoExecutionException("Failed to merge yaml files", e);
 		}
 	}

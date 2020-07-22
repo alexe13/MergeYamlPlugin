@@ -29,7 +29,6 @@ public class YamlMerger {
 		mergedFile.getParentFile().mkdirs();
 		YamlPrinter filePrinter = Yaml.createYamlPrinter(new FileWriter(mergedFile));
 
-		System.out.println(mergedMapping.toString());
 		filePrinter.print(mergedMapping);
 	}
 
